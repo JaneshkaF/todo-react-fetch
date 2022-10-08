@@ -1,28 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState} from "react";
 
 
 const Home = () => {
 	const [list, setList] = useState([])
 
-	useEffect(() => {}, [])
-		fetch("https://assets.breatheco.de/apis/fake/todos/user/Janeshka")
-			.then(response => response.json())
-			.then(result => console.log(result))
-			.catch(error => console.log(error))
-}, []
+	useEffect(() => {
+		getList()
+	}, [])
 
-const addTask = (myTask) => {
-	fetch("https://assets.breatheco.de/apis/fake/todos/user/Janeshka",{
-		method: 'PUT',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(myTask),
-		redirect: 'follow'
+	const getList = () => {
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/Janeshka")
+		.then(response => response.json())
+	 	.then(result => setList(result))
+		.catch(error => console.log(error))
+	}
+
+	const addTask = (myTask) => {
+		var newList = [...list, myTask]
+		fetch("https://assets.breatheco.de/apis/fake/todos/user/Janeshka",{
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(newList),
+			redirect: 'follow'
 	})
-	.then(response => response.json())
-	.then(result => getComputedStyle.list())
-	.catch(error => console.log(error))
+		.then(response => response.json())
+		.then(result => getList())
+		.catch(error => console.log(error))
 }
 
 	return (
@@ -31,9 +36,11 @@ const addTask = (myTask) => {
 				return(
 					<p key={i}>{task.label}</p>
 				)
-		}
-			<button className="btn btn-primary"
-			onClick={() => addTask({label: 'eat' , done: false})}>add</button>
+			})}
+		<h1>To Do</h1>
+		<button 
+			className="btn btn-success"
+			onClick={() => addTask({label: 'eat', done: false})}>Add</button>
 		</div>
 	);
 };
