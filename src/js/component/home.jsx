@@ -30,6 +30,20 @@ const Home = () => {
 		.catch(error => console.log(error))
 }
 
+const deleteTask = (index) => {
+    const delList = list.filter((task, i) => i != index);
+    console.log(delList);
+    fetch("https://assets.breatheco.de/apis/fake/todos/user/Janeshka", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(delList),
+      redirect: "follow",
+    })
+      .then((response) => response.json())
+      .then((result) => getList())
+      .catch((error) => console.log("error", error));
+  }
+
 	return (
 		<div className="text-center">
 			{list.map((task, i) => {
@@ -41,6 +55,9 @@ const Home = () => {
 		<button 
 			className="btn btn-success"
 			onClick={() => addTask({label: 'eat', done: false})}>Add</button>
+			<button 
+			className="btn btn-success"
+			onClick={() => deleteTask({label: 'eat', done: false})}>delete</button>
 		</div>
 	);
 };
