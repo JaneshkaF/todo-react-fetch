@@ -58,12 +58,21 @@ const Home = () => {
           );
         })}
       </ul>
+      <form>
+      <button className="btn btn-success" inputtype="text" label for="newtask"
+       onClick={() => addTask({ label: " ", done: false })}>New Task</button>
+       <input type="text" id="txt" name="text" required></input>
+       </form>
+      <form>
+      <input type="text" id="newtask" name="newtask"></input>
       <button
         className="btn btn-success"
-        onClick={() => addTask({ label: "eat", done: false })}
+        inputtype="text"
+        onClick={() => addTask({label: " ", done: false })}
       >
         Add
       </button>
+      </form>
     </div>
   );
 };
