@@ -55,7 +55,10 @@ const Home = () => {
       <input type="text" onChange={(e)=>setInput(e.target.value)} id="newtask" name="newtask"></input>
       <button
         className="btn btn-success"
-        onClick={() => addTask(input)}
+        onClick={(e) => {
+          e.preventDefault()
+          addTask(input)
+        }}
       >
         Add
       </button>
