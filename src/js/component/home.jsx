@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 
 const Home = () => {
   const [list, setList] = useState([]);
-
-  useEffect(() => {
-    getList();
-  }, []);
+  const [input, setInput] = useState("")
+  // useEffect(() => {
+  //   getList();
+  // }, []);
 
   const getList = () => {
     fetch("https://assets.breatheco.de/apis/fake/todos/user/Janeshka")
@@ -14,8 +14,12 @@ const Home = () => {
       .catch((error) => console.log(error));
   };
 
+  useEffect(() => {
+    getList();
+  }, []);
+
   const addTask = (myTask) => {
-    var newList = [...list, myTask];
+    var newList = [...list, {label:myTask, done:false}];
     fetch("https://assets.breatheco.de/apis/fake/todos/user/Janeshka", {
       method: "PUT",
       headers: {
@@ -24,8 +28,9 @@ const Home = () => {
       body: JSON.stringify(newList),
       redirect: "follow",
     })
-      .then((response) => response.json())
-      .then((result) => getList())
+      .then((response) => {
+        response.status===200 ? setList(newList):"";
+      })
       .catch((error) => console.log(error));
   };
 
@@ -46,6 +51,15 @@ const Home = () => {
   return (
     <div className="text-center container">
 	<h1>To Do</h1>
+      <form>
+      <input type="text" onChange={(e)=>setInput(e.target.value)} id="newtask" name="newtask"></input>
+      <button
+        className="btn btn-success"
+        onClick={() => addTask(input)}
+      >
+        Add
+      </button>
+      <div>
       <ul className="list-group">
         {list.map((task, i) => {
           return (
@@ -58,20 +72,7 @@ const Home = () => {
           );
         })}
       </ul>
-      <form>
-      <button className="btn btn-success" inputtype="text" label for="newtask"
-       onClick={() => addTask({ label: " ", done: false })}>New Task</button>
-       <input type="text" id="txt" name="text" required></input>
-       </form>
-      <form>
-      <input type="text" id="newtask" name="newtask"></input>
-      <button
-        className="btn btn-success"
-        inputtype="text"
-        onClick={() => addTask({label: " ", done: false })}
-      >
-        Add
-      </button>
+      </div>
       </form>
     </div>
   );
